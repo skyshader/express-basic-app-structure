@@ -7,9 +7,11 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const config = require('./config');
+mongoose.Promise = require('bluebird');
 
+const config = require('./config');
 const port = process.env.PORT || 3000;
+
 const app = express();
 
 module.exports = app;
