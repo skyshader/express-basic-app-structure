@@ -5,9 +5,9 @@ require('dotenv').config();
 // const fs = require('fs');
 // const join = require('path').join();
 const express = require('express');
-const mongoose = require('mongoose');
+const db = require('mongoose');
 const passport = require('passport');
-mongoose.Promise = require('bluebird');
+db.Promise = require('bluebird');
 
 const config = require('./config');
 const port = process.env.PORT || 3000;
@@ -33,5 +33,5 @@ function listen () {
 
 function mongoose_connect () {
     const options = { server: { socketOptions: { keepAlive: 1 } } };
-    return mongoose.connect(config.db, options).connection;
+    return db.connect(config.db, options).connection;
 }
