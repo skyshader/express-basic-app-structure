@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    index: function(req, res) {
+    index: (req, res) => {
         res.json({success: true, message: "Main#index"});
     }
 };
