@@ -4,7 +4,9 @@ const express = require('express');
 const router = express.Router();
 
 // load versioned controllers
-const main = require('../../app/controllers/v1/main');
+const main = require('../../app/controllers/v1/MainController');
+const user = require('../../app/controllers/v1/UserController');
+const auth = require('../../app/controllers/v1/AuthController');
 
 // define routes
 module.exports = function(passport) {
@@ -21,6 +23,11 @@ module.exports = function(passport) {
 
     // All routes definition goes here
     router.get('/', main.index);
+
+    router.get('/users', user.index);
+
+    router.post('/auth/login', auth.login);
+    router.post('/auth/signup', auth.signup);
 
     // If nothing else matches, return 404
     router.get('*', function(req, res) {

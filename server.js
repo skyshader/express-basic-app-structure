@@ -39,4 +39,4 @@ mongoose.connect(config.db, options);
 mongoose.connection
     .on('error', console.log)
     .on('disconnected', () => {})
-    .once('open', listen());
+    .once('open', listen);

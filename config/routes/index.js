@@ -1,7 +1,7 @@
 'use strict';
 
 // load version-less controllers
-const main = require('../../app/controllers/main');
+const main = require('../../app/controllers/MainController');
 
 // define routes
 module.exports = function(app, passport) {
