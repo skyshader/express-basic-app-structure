@@ -11,7 +11,7 @@ const config = {
     algorithm: 'HS256',
     secret: process.env.tokenSecret || "ghO/I-uYjYTM[>n7hQ;a|nJl&`/*-ut[uQ-wR33G#Dk$X}Me&g3tg~0_*.7WIK~M",
     issuer: "api.venturepact.com",
-    audience: "api.venturepact.com"
+    audience: "app.venturepact.com"
 };
 
 const JWT_STRATEGY_CONFIG = {
@@ -22,12 +22,14 @@ const JWT_STRATEGY_CONFIG = {
     jwtFromRequest: ExtractJwt.fromAuthHeader()
 };
 
-const _onJwtStrategyAuth = (jwt_payload, next) => {
-    console.log(jwt_payload);
-    next();
+const _onJwtStrategyAuth = (payload, next) => {
+    let user = payload.user;
+    return next(null, user, {});
 };
 
+const jwtStrategy = new JwtStrategy(JWT_STRATEGY_CONFIG, _onJwtStrategyAuth);
+
 module.exports = {
-    strategy: new JwtStrategy(JWT_STRATEGY_CONFIG, _onJwtStrategyAuth),
+    strategy: jwtStrategy,
     config: config
 };

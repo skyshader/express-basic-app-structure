@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const passport = require('passport');
+const passport_jwt = require('./../../../config/passport');
 const JwtService = require('./../../services/JwtService');
 
 // load necessary models
@@ -11,10 +12,8 @@ const User = mongoose.model('User');
 module.exports = {
     login: (req, res) => {
         console.log('Logining in..');
-        passport.authenticate('jwt', () => {
-            console.log('inside');
-            res.json({});
-        });
+
+        passport.authenticate('jwt', { session: false})(req, res);
     },
 
     signup: (req, res) => {
