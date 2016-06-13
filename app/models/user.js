@@ -1,50 +1,62 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const AuthService = require('../services/HashService');
+const HashService = require('../services/HashService');
 
-const UserSchema = new mongoose.Schema({
-    first_name:  {
-        type: String,
-        default: ''
+const UserSchema = new mongoose.Schema(
+    {
+        first_name:  {
+            type: String,
+            default: ''
+        },
+        last_name: {
+            type: String,
+            default: ''
+        },
+        username: {
+            type: String,
+            required: true,
+            minlength: 4,
+            lowercase: true,
+            unique: true
+        },
+        email: {
+            type: String,
+            required: true,
+            lowercase: true,
+            unique: true
+        },
+        password: {
+            type: String,
+            required: true
+        }
     },
-    last_name: {
-        type: String,
-        default: ''
-    },
-    username: {
-        type: String,
-        required: true,
-        minlength: 4,
-        lowercase: true,
-        unique: true
-    },
-    email: {
-        type: String,
-        required: true,
-        lowercase: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now
+    {
+        timestamps: true
     }
-});
+);
 
-UserSchema.pre('save', (next) => {
+UserSchema.set('toJSON', { getters: true, virtuals: false, transform: (doc, ret, options) => {
+    delete ret.password;
+    delete ret.__v;
+    return ret;
+} });
+
+UserSchema.set('toObject', { getters: true, virtuals: false, transform: (doc, ret, options) => {
+    delete ret.password;
+    delete ret.__v;
+    return ret;
+} });
+
+UserSchema.pre('save', function(next) {
     let user = this;
     if(this.isModified('password') || this.isNew) {
-        AuthService.hashPassword(user, next);
+        HashService.hashPassword(user, (err, hash) => {
+            user.password = hash;
+            next();
+        });
     }
     return next();
 });
 
-mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);

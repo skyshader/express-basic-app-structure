@@ -26,7 +26,6 @@ require('./config/passport')(passport);
 require('./config/express')(app, passport);
 require('./config/routes')(app, passport);
 
-
 const listen = () => {
     if (app.get('env') === 'test') return;
     app.listen(port);
@@ -35,7 +34,12 @@ const listen = () => {
 
 // connect to mongoose
 const options = { server: { socketOptions: { keepAlive: 1 } } };
-mongoose.connect(config.db, options);
+mongoose.connect(config.db, options, () => {
+    if (app.get('env') === 'development') {
+        mongoose.connection.db.dropDatabase();
+    }
+});
+
 mongoose.connection
     .on('error', console.log)
     .on('disconnected', () => {})

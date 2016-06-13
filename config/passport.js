@@ -1,10 +1,9 @@
 'use strict';
 
-// const mongoose = require('mongoose');
-// const User = mongoose.model('User');
-
 const jwt = require('./passport/jwt');
+// const oauth2 = require('./passport/oauth2');
 
 module.exports = (passport) => {
-    passport.use(jwt);
+    passport.use(jwt.strategy);
+    // passport.use(oauth2.strategy);
 };
