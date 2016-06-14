@@ -3,20 +3,13 @@
 const bCrypt = require('bcrypt-nodejs');
 
 module.exports = {
-    hashPassword: (user, cb) => {
-        bCrypt.genSalt(10, (err, salt) => {
-            if (err) cb(err);
-            bCrypt.hash(user.password, salt, null, (err, hash) => {
-                if (err) return next(err);
-                cb(null, hash);
-            });
-        });
+    hashPassword: (password) => {
+        const salt = bCrypt.genSaltSync(10);
+        return bCrypt.hashSync(password, salt);
     },
 
-    comparePassword: (password, user, cb) => {
-        bCrypt.compare(password, user.password, (err, isMatch) => {
-            if (err) cb(err);
-            cb(null, isMatch);
-        });
+    comparePassword: (password, user) => {
+        console.log('Password', password, user.password);
+        return bCrypt.compareSync(password, user.password);
     }
 };

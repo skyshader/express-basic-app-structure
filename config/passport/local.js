@@ -17,20 +17,29 @@ function _onLocalStrategyAuth(username, password, next) {
     User.findOne({ $or: [{ 'username': username }, { 'email': username }] })
         .then((user) => {
 
+            console.log(user);
+
             if (!user) return next(null, false, {
                 code: 'E_USER_NOT_FOUND',
                 message: username + ' is not found'
             });
 
-            if (!HashService.comparePassword(password, user))
+            if(!HashService.comparePassword(password, user)) {
                 return next(null, false, {
-                    code: 'E_WRONG_PASSWORD',
-                    message: 'Password is wrong'
+                    code: 'E_INVALID_PASSWORD',
+                    message: 'Password is wrong!'
                 });
+            }
 
-            return next(null, user, {});
+            next(null, user, {});
         })
         .catch((error) => {
             return next(error, false, {});
         });
 }
+
+const localStrategy = new LocalStrategy(LOCAL_STRATEGY_CONFIG, _onLocalStrategyAuth);
+
+module.exports = {
+    strategy: localStrategy
+};

@@ -37,24 +37,15 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.set('toJSON', { getters: true, virtuals: false, transform: (doc, ret, options) => {
-    delete ret.password;
-    delete ret.__v;
-    return ret;
-} });
-
-UserSchema.set('toObject', { getters: true, virtuals: false, transform: (doc, ret, options) => {
-    delete ret.password;
+    // delete ret.password;
     delete ret.__v;
     return ret;
 } });
 
 UserSchema.pre('save', function(next) {
-    let user = this;
     if(this.isModified('password') || this.isNew) {
-        HashService.hashPassword(user, (err, hash) => {
-            user.password = hash;
-            next();
-        });
+        this.password = HashService.hashPassword(this.password);
+        next();
     }
     return next();
 });
