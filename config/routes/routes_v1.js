@@ -3,6 +3,8 @@
 const express = require('express');
 const router = express.Router();
 
+const authorization = require('./../middlewares/authorization');
+
 // load versioned controllers
 const main = require('../../app/controllers/v1/MainController');
 const user = require('../../app/controllers/v1/UserController');
@@ -24,17 +26,20 @@ module.exports = function(passport) {
     // All routes definition goes here
     router.get('/', main.index);
 
-    router.get('/users', user.index);
-
     router.post('/auth/login', auth.login);
     router.post('/auth/signup', auth.signup);
+
+    router.get('/users', authorization.isAuthenticated, user.index);
 
     // If nothing else matches, return 404
     router.get('*', function(req, res) {
         res.status = 404;
         res.json({
             success: false,
-            message: 'Unknown request'
+            error: {
+                code: 'E_NOT_FOUND',
+                message: 'Unknown Request'
+            }
         });
     });
 

@@ -13,7 +13,6 @@ module.exports = {
         passport.authenticate('local', { session: false}, (err, user, info) => {
             console.log(err, user, info);
             if (err) {
-                console.log('First...');
                 res.status = 500;
                 return res.json({
                     success: false,
@@ -25,7 +24,6 @@ module.exports = {
             }
 
             if (!user) {
-                console.log('Second...');
                 res.status = 401;
                 return res.json({
                     success: false,
@@ -36,7 +34,6 @@ module.exports = {
                 });
             }
 
-            console.log('Last...');
             res.status = 200;
             return res.json({
                 success: true,
