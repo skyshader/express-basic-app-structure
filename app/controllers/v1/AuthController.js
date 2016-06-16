@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const passport = require('passport');
 const JwtService = require('./../../services/JwtService');
+const response = require('./../../../config/responses');
 
 // load necessary models
 const mongoose = require('mongoose');
@@ -12,34 +13,18 @@ module.exports = {
     login: (req, res) => {
         passport.authenticate('local', { session: false}, (err, user, info) => {
             console.log(err, user, info);
-            if (err) {
-                res.status = 500;
-                return res.json({
-                    success: false,
-                    error: {
-                        code: 'E_UNEXPECTED',
-                        message: err
-                    }
-                });
-            }
+            if (err) return response.error(res, err);
 
             if (!user) {
-                res.status = 401;
-                return res.json({
-                    success: false,
-                    error: {
-                        code: info.code,
-                        message: info.message
-                    }
-                });
+                return response.unauthorized(res, info);
             }
 
-            res.status = 200;
-            return res.json({
-                success: true,
+            let data = {
                 token: JwtService.createToken(user),
                 user: user.toJSON()
-            });
+            };
+
+            return response.ok(res, data);
         })(req, res);
     },
 
@@ -47,19 +32,15 @@ module.exports = {
         let user = new User(_.omit(req.body, 'id'));
         user.save()
             .then(() => {
-                res.status = 201;
-                return res.json({
-                    success: true,
+                let data = {
                     token: JwtService.createToken(user),
                     user: user.toJSON()
-                });
+                };
+
+                return response.created(res, data);
             })
             .catch((err) => {
-                res.status = 500;
-                return res.json({
-                    success: false,
-                    error: err
-                });
+                return response.error(res, err);
             });
     }
 };

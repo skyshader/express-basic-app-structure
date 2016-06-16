@@ -21,7 +21,7 @@ function _onLocalStrategyAuth(username, password, next) {
 
             if (!user) return next(null, false, {
                 code: 'E_USER_NOT_FOUND',
-                message: username + ' is not found'
+                message: 'Your account does not exist!'
             });
 
             if(!HashService.comparePassword(password, user)) {

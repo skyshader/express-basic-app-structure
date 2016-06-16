@@ -20,21 +20,6 @@ module.exports = {
                 audience: jwtConfig.audience
             }
         );
-    },
-
-    passportAuth: (req, res, err, user, info) => {
-        if(err) {
-            console.log(err);
-            throw err;
-        }
-        if (!user) {
-            throw new Error('Unauthorized');
-        }
-
-        return res.json({
-            token: this.createToken(user),
-            user: user
-        });
     }
 
 };

@@ -9,7 +9,6 @@ module.exports = {
     },
 
     comparePassword: (password, user) => {
-        console.log('Password', password, user.password);
         return bCrypt.compareSync(password, user.password);
     }
 };
