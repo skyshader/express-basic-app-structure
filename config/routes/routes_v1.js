@@ -4,11 +4,12 @@ const express = require('express');
 const router = express.Router();
 
 const authorization = require('./../middlewares/authorization');
+const errors = require('./../constants').errors;
 
 // load versioned controllers
-const main = require('../../app/controllers/v1/MainController');
-const user = require('../../app/controllers/v1/UserController');
-const auth = require('../../app/controllers/v1/AuthController');
+const main = require('../../app/controllers/v1/base');
+const user = require('../../app/controllers/v1/user');
+const auth = require('../../app/controllers/v1/auth');
 
 // define routes
 module.exports = function(passport) {
@@ -36,10 +37,7 @@ module.exports = function(passport) {
         res.status = 404;
         res.json({
             success: false,
-            error: {
-                code: 'E_NOT_FOUND',
-                message: 'Unknown Request'
-            }
+            error: errors.E_NOT_FOUND
         });
     });
 

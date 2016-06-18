@@ -6,7 +6,7 @@ module.exports = (res, err) => {
         error: {
             code: 'E_UNEXPECTED',
             trace: err.stack,
-            message: "Something went wrong"
+            message: "Something went wrong!"
         }
     });
 };

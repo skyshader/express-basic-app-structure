@@ -29,7 +29,7 @@ require('./config/routes')(app, passport);
 const listen = () => {
     if (app.get('env') === 'test') return;
     app.listen(port);
-    console.log('Express app started on port ' + port);
+    console.log('Express app started in ' + app.get('env') + ' mode on port ' + port);
 };
 
 // connect to mongoose

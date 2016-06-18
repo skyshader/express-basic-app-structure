@@ -3,7 +3,8 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
-const HashService = require('./../../app/services/HashService');
+const PasswordHash = require('./../../app/services/password-hash');
+const errors = require('./../constants').errors;
 
 const LocalStrategy = require('passport-local').Strategy;
 
@@ -19,16 +20,10 @@ function _onLocalStrategyAuth(username, password, next) {
 
             console.log(user);
 
-            if (!user) return next(null, false, {
-                code: 'E_USER_NOT_FOUND',
-                message: 'Your account does not exist!'
-            });
+            if (!user) return next(null, false, errors.E_USER_NOT_FOUND);
 
-            if(!HashService.comparePassword(password, user)) {
-                return next(null, false, {
-                    code: 'E_INVALID_PASSWORD',
-                    message: 'Password is wrong!'
-                });
+            if(!PasswordHash.compare(password, user.password)) {
+                return next(null, false, errors.E_INVALID_PASSWORD);
             }
 
             next(null, user, {});

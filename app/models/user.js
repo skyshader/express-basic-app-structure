@@ -1,7 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const HashService = require('../services/HashService');
+const PasswordHash = require('../services/password-hash');
 
 const UserSchema = new mongoose.Schema(
     {
@@ -44,7 +44,7 @@ UserSchema.set('toJSON', { getters: true, virtuals: false, transform: (doc, ret,
 
 UserSchema.pre('save', function(next) {
     if(this.isModified('password') || this.isNew) {
-        this.password = HashService.hashPassword(this.password);
+        this.password = PasswordHash.generate(this.password);
         next();
     }
     return next();

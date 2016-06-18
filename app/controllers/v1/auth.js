@@ -2,16 +2,18 @@
 
 const _ = require('lodash');
 const passport = require('passport');
-const JwtService = require('./../../services/JwtService');
+const JwtService = require('./../../services/jwt-service');
 const response = require('./../../../config/responses');
 
 // load necessary models
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
-module.exports = {
-    login: (req, res) => {
-        passport.authenticate('local', { session: false}, (err, user, info) => {
+class Auth {
+    constructor() {}
+
+    login(req, res) {
+        passport.authenticate('local', { session: false }, (err, user, info) => {
             console.log(err, user, info);
             if (err) return response.error(res, err);
 
@@ -26,9 +28,9 @@ module.exports = {
 
             return response.ok(res, data);
         })(req, res);
-    },
+    }
 
-    signup: (req, res) => {
+    signup(req, res) {
         let user = new User(_.omit(req.body, 'id'));
         user.save()
             .then(() => {
@@ -43,4 +45,6 @@ module.exports = {
                 return response.error(res, err);
             });
     }
-};
+}
+
+module.exports = new Auth();
