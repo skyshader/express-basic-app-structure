@@ -1,32 +1,24 @@
 'use strict';
 
 const jwt = require('jsonwebtoken');
-const config = require('./../../config/passport/jwt').config;
+const jwtConfig = require('./../../config/passport/jwt').config;
 
-class JwtService {
-    constructor() {}
-
-    createToken(user) {
-        return jwt.sign(
-            {
-                user:
-                {
+module.exports = {
+    createToken: (user) => {
+        return jwt.sign({
+                user: {
                     username: user.username,
                     email: user.email,
                     first_name: user.first_name
                 }
             },
-
-            config.secret,
-
+            jwtConfig.secret,
             {
-                algorithm: config.algorithm,
-                expiresIn: config.expiresIn,
-                issuer: config.issuer,
-                audience: config.audience
+                algorithm: jwtConfig.algorithm,
+                expiresIn: jwtConfig.expiresIn,
+                issuer: jwtConfig.issuer,
+                audience: jwtConfig.audience
             }
         );
     }
-}
-
-module.exports = new JwtService();
+};

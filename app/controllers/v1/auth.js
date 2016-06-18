@@ -9,10 +9,8 @@ const response = require('./../../../config/responses');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
-class Auth {
-    constructor() {}
-
-    login(req, res) {
+module.exports = {
+    login: (req, res) => {
         passport.authenticate('local', { session: false }, (err, user, info) => {
             console.log(err, user, info);
             if (err) return response.error(res, err);
@@ -28,9 +26,9 @@ class Auth {
 
             return response.ok(res, data);
         })(req, res);
-    }
+    },
 
-    signup(req, res) {
+    signup: (req, res) => {
         let user = new User(_.omit(req.body, 'id'));
         user.save()
             .then(() => {
@@ -45,6 +43,4 @@ class Auth {
                 return response.error(res, err);
             });
     }
-}
-
-module.exports = new Auth();
+};

@@ -1,14 +1,7 @@
 'use strict';
 
-class User {
-    constructor() {}
-
-    index(req, res) {
-        return res.json({
-            success: true,
-            message: "User#v1"
-        });
+module.exports = {
+    index: (req, res) => {
+        res.json({success: true, message: "UserController_v1#index"});
     }
-}
-
-module.exports = new User();
+};

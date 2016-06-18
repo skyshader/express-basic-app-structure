@@ -1,14 +1,7 @@
 'use strict';
 
-class Base {
-    constructor() {}
-
-    index(req, res) {
-        return res.json({
-            success: true,
-            message: "Base#v1"
-        });
+module.exports = {
+    index: (req, res) => {
+        res.json({success: true, message: "Main_v1#index"});
     }
-}
-
-module.exports = new Base();
+};
