@@ -4,7 +4,6 @@ const express = require('express');
 const router = express.Router();
 
 const authorization = require('./../middlewares/authorization');
-const errors = require('./../constants').errors;
 
 // load versioned controllers
 const main = require('../../app/controllers/v1/base');
@@ -30,16 +29,7 @@ module.exports = function(passport) {
     router.post('/auth/login', auth.login);
     router.post('/auth/signup', auth.signup);
 
-    router.get('/users', authorization.isAuthenticated, user.index);
-
-    // If nothing else matches, return 404
-    router.get('*', function(req, res) {
-        res.status = 404;
-        res.json({
-            success: false,
-            error: errors.E_NOT_FOUND
-        });
-    });
+    router.put('/users', authorization.isAuthenticated, user.index);
 
     return router;
 };

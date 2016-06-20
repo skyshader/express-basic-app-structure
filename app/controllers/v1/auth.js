@@ -12,7 +12,6 @@ const User = mongoose.model('User');
 module.exports = {
     login: (req, res) => {
         passport.authenticate('local', { session: false }, (err, user, info) => {
-            console.log(err, user, info);
             if (err) return response.error(res, err);
 
             if (!user) {
